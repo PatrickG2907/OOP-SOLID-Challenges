@@ -1,88 +1,251 @@
-# Intermediate Level OOP & SOLID Challenges
+# OOP & SOLID Challenges (Intermediate Level)
 
-Welcome to the **Intermediate Level** challenges focused on Object-Oriented Programming (OOP) and SOLID principles. These challenges are designed to help you further develop your skills and apply more advanced concepts such as **Strategy Pattern**, **Dependency Injection**, and **Liskov Substitution Principle**.
+This repository contains a series of Object-Oriented Programming (OOP) and SOLID principle challenges to help you strengthen your understanding of software design and architecture. The challenges are grouped by difficulty level, starting with Beginner and moving toward Expert.
 
-As you work through these challenges, you'll refine your understanding of key OOP concepts and SOLID principles while tackling real-world problems with multiple design solutions.
+## Intermediate Level Challenges
 
----
+### Challenge 1: Payment Processing System
 
-## Challenge 1: Payment Processing System
+#### Task
+Support payments via:
+- Credit Card
+- PayPal
+- Crypto
 
-### Task
-Create a system that supports multiple payment methods:
-- **Credit Card**
-- **PayPal**
-- **Crypto**
+#### Objectives
+- **Open/Closed Principle**
+- **Dependency Inversion**
+- **Strategy Pattern**
 
-### Objectives
-- **Open/Closed Principle**: The system should be open for extension (new payment methods) but closed for modification.
-- **Dependency Inversion**: High-level modules should not depend on low-level modules; both should depend on abstractions.
-- **Strategy Pattern**: Use a strategy pattern to define a family of payment methods and switch between them dynamically.
+#### Explanations
 
----
+**OOP Principles**
+- **Abstraction**:  
+    - Abstract the `PaymentMethod` interface so that all payment types can be used interchangeably.
+  
+- **Polymorphism**:  
+    - `PaymentProcessor` calls `pay()` without knowing the concrete payment method.
+  
+- **Composition**:  
+    - `PaymentProcessor` receives a `PaymentMethod` instead of inheriting from it, making the system more flexible and decoupled.
 
-## Challenge 2: Employee Salary Calculator
-
-### Task
-Create different types of employees, each calculating their salary differently:
-- **Full-time Employee**
-- **Part-time Employee**
-- **Contractor**
-
-### Objectives
-- **Liskov Substitution Principle (LSP)**: Ensure that objects of the base class (e.g., `Employee`) can be replaced with objects of derived classes (e.g., `FullTimeEmployee`, `PartTimeEmployee`, `Contractor`) without affecting the functionality.
-- **Polymorphism**: Use polymorphism to define different ways of calculating salaries.
-- **Avoid type-checking**: Do not use type-checking or explicit conditionals to handle different employee types.
-
----
-
-## Challenge 3: Logging Framework
-
-### Task
-Design a logging framework that can log messages to:
-- **Console**
-- **File**
-- **Remote Server**
-
-### Objectives
-- **Interface Segregation Principle (ISP)**: Split the logging interface into smaller, more specific interfaces (e.g., `ILogToConsole`, `ILogToFile`).
-- **Dependency Injection**: Inject dependencies (like the loggers) into the classes that require logging, rather than hard-coding them.
+**SOLID Principles**
+- **SRP (Single Responsibility Principle)**:  
+    - Each class has one responsibility: processing, paying, and managing result data.
+  
+- **OCP (Open/Closed Principle)**:  
+    - New payment methods can be added without changing existing code.
+  
+- **LSP (Liskov Substitution Principle)**:  
+    - All payment methods behave consistently and are interchangeable.
+  
+- **ISP (Interface Segregation Principle)**:  
+    - The `PaymentMethod` interface is small and contains only one method: `pay()`.
+  
+- **DIP (Dependency Inversion Principle)**:  
+    - High-level logic depends on the `PaymentMethod` abstraction, not on the concrete classes (`CreditCard`, `PayPal`, `Crypto`).
 
 ---
 
-## Challenge 4: Smart Home Devices
+### Challenge 2: Employee Salary Calculator
 
-### Task
-Design a system for smart home devices, where devices can include:
-- **Light**
-- **Fan**
+#### Task
+Create different employee types:
+- Full-time
+- Part-time
+- Contractor
 
-Each device can:
-- **Turn on/off**
-- Some devices may have additional functionalities (e.g., **Fan** can set speed).
+Each calculates salary differently.
 
-### Objectives
-- **Interface Segregation Principle (ISP)**: Devices should implement only the methods they need (e.g., a `Fan` might not need an `On/Off` method if it’s already a part of the general `Device` interface).
-- **Avoid forcing unused methods**: Do not force devices to implement methods they don’t use (e.g., a `Light` device shouldn’t have a `SetSpeed` method).
+#### Objectives
+- **Liskov Substitution Principle**
+- **Polymorphism**
+- **Avoid Type-Checking**
+
+#### Explanations
+
+**OOP Principles**
+- **Abstraction**:  
+    - `PayPolicy` defines what salary calculation is, not how it is performed.  
+    - Consumers don’t care about the concrete pay type (e.g., `FullTimePay`, `PartTimePay`).
+  
+- **Encapsulation**:  
+    - Pay-related data (`_monthly_salary`, `_hourly_rate`, `_bonus`) is hidden inside the respective pay classes.
+    - Validation and behavior live with the data they operate on, ensuring proper management of pay rules.
+
+- **Polymorphism**:  
+    - Different pay strategies (`FullTimePay`, `PartTimePay`, etc.) implement the same interface, allowing the same method call to work for all pay types.
+
+- **Composition**:  
+    - `Employee` has a `PayPolicy` instead of being a type of `PayPolicy`. This avoids tight coupling and rigid class hierarchies.
+
+**SOLID Principles**
+- **SRP (Single Responsibility Principle)**:  
+    - `Employee` handles employee identity, while `PayPolicy` handles salary calculation.  
+    - Each class has one reason to change.
+
+- **OCP (Open/Closed Principle)**:  
+    - New pay types can be added by creating new `PayPolicy` classes. Existing code does not need to change.
+  
+- **LSP (Liskov Substitution Principle)**:  
+    - Any `PayPolicy` subclass can replace another without breaking behavior, thanks to the contract defined by the abstract base class.
+  
+- **ISP (Interface Segregation Principle)**:  
+    - `PayPolicy` exposes only the `calculate_salary()` method, ensuring classes aren’t forced to implement unnecessary functionality.
+  
+- **DIP (Dependency Inversion Principle)**:  
+    - `Employee` depends on the `PayPolicy` abstraction, not concrete pay classes. High-level logic is decoupled from low-level implementation.
 
 ---
 
-## Challenge 5: Online Order System
+### Challenge 3: Logging Framework
 
-### Task
-Create a system to manage online orders with:
-- Items in the order
-- Total price calculation
-- Discount application
+#### Task
+Log messages to:
+- Console
+- File
+- Remote server
 
-### Objectives
-- **Single Responsibility Principle (SRP)**: Keep order storage separate from pricing logic. Pricing should be handled by a separate class, while the order stores the items.
-- **Open/Closed Principle**: The discount rules should be easily extendable without modifying existing code (i.e., new discount strategies can be added).
+#### Objectives
+- **Interface Segregation**
+- **Dependency Injection**
+
+#### Explanations
+
+**OOP Principles**
+- **Abstraction**:  
+    - `LoggerStrategy` defines what a logger does (logging messages), not how it is done.  
+    - Concrete loggers (e.g., `ConsoleLogger`, `FileLogger`, `RemoteLogger`) hide their implementation details behind a common interface.
+  
+- **Encapsulation**:  
+    - Each concrete logger encapsulates its own logging behavior (e.g., file handling, printing to console, or remote sending).
+  
+- **Polymorphism**:  
+    - `Logger` treats all loggers uniformly.  
+    - Different implementations respond to the same `log()` method call in their own specific way.
+
+- **Composition over Inheritance**:  
+    - `Logger` is composed of `LoggerStrategy` objects, rather than inheriting from a base class.  
+    - This allows dynamic behavior composition at runtime.
+
+**SOLID Principles**
+- **SRP (Single Responsibility Principle)**:  
+    - `Logger` handles validation and orchestration, while concrete loggers handle output.
+  
+- **OCP (Open/Closed Principle)**:  
+    - New logging targets (e.g., `EmailLogger`) can be added without modifying existing code.  
+    - Simply create a new `LoggerStrategy` implementation.
+
+- **LSP (Liskov Substitution Principle)**:  
+    - `Logger` relies only on the `LoggerStrategy` interface. Any subclass of `LoggerStrategy` can replace another without breaking behavior.
+
+- **ISP (Interface Segregation Principle)**:  
+    - `LoggerStrategy` exposes only one method: `log()`. Clients don’t have to implement or depend on unnecessary methods.
+
+- **DIP (Dependency Inversion Principle)**:  
+    - Concrete loggers are injected into `Logger` rather than being created internally.  
+    - This allows `Logger` to depend on abstractions (`LoggerStrategy`), not on concrete implementations.
 
 ---
 
-## How to Use This Repository
+### Challenge 4: Smart Home Devices
 
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/yourusername/OOP-SOLID-Challenges.git
+#### Task
+Devices include:
+- Light
+- Fan
+
+Each can turn on/off, some can set values.
+
+#### Objectives
+- **Interface Segregation**
+- **Avoid Forcing Unused Methods**
+
+#### Explanations
+
+**OOP Principles**
+- **Encapsulation**:  
+    - State (`_state`, `_value`) is private inside behavior classes.  
+    - Access is controlled via methods and read-only properties, ensuring no direct manipulation of internal state.
+
+- **Abstraction**:  
+    - `Switchable` and `Adjustable` are interfaces that define what devices can do, not how they perform actions.  
+    - Composition is used to inject behaviors (e.g., `OnOffBehavior`, `ValueBehavior`) into devices.
+
+- **Polymorphism**:  
+    - Functions operate on interfaces (e.g., `Switchable`).  
+    - Any device implementing the `Switchable` interface can be used interchangeably.
+
+**SOLID Principles**
+- **SRP (Single Responsibility Principle)**:  
+    - `OnOffBehavior` handles power state management, `ValueBehavior` manages numerical values and validation, and `Device` orchestrates the device's behavior.
+  
+- **OCP (Open/Closed Principle)**:  
+    - New devices or behaviors can be added without modifying existing classes.  
+    - For example, a new device (e.g., `Thermostat`) can be added by creating a new behavior class (e.g., `TemperatureBehavior`).
+
+- **LSP (Liskov Substitution Principle)**:  
+    - All `Switchable` devices behave consistently.  
+    - Any implementation of `Switchable` can replace another without breaking client code.
+
+- **ISP (Interface Segregation Principle)**:  
+    - Interfaces are kept small and focused (e.g., `Switchable`, `Adjustable`).  
+    - Devices implement only the methods they actually need.
+
+- **DIP (Dependency Inversion Principle)**:  
+    - Devices depend on abstractions (e.g., `Switchable`, `Adjustable` behaviors) rather than concrete implementations.
+
+---
+
+### Challenge 5: Online Order System
+
+#### Task
+Orders:
+- Have items
+- Calculate total price
+- Apply discounts
+
+#### Objectives
+- **SRP (Single Responsibility Principle)**
+- **Open/Closed Principle**
+
+#### Explanations
+
+**OOP Principles**
+- **Encapsulation**:  
+    - `Item` hides its internal `_items` list and exposes methods (`add_item`, `remove_item`, `total`) to interact with it.
+    - Discount subclasses encapsulate the discount logic, ensuring that the order and pricing logic remain separate.
+
+- **Abstraction & Polymorphism**:  
+    - `Discount` is an abstract base class.  
+    - `PercentageDiscount` and `ThresholdDiscount` implement `apply()` so that `Order` can use any discount type without knowing the specifics.
+
+- **Immutable Value Object**:  
+    - `Item` is an immutable data object, ensuring no side effects during the operations on the items.
+
+- **Responsibility Separation**:  
+    - Each class has a single, clear responsibility:  
+        - `Item` → Represents a product.  
+        - `Items` → Manages a collection of items.  
+        - `Discount` → Calculates discounts.  
+        - `Order` → Orchestrates the collection of items and applies discounts.
+
+**SOLID Principles**
+- **SRP (Single Responsibility Principle)**:  
+    - `Item` holds data, `Items` manages the collection, `Discount` applies pricing rules, and `Order` orchestrates the total calculation.
+  
+- **OCP (Open/Closed Principle)**:  
+    - Adding new discounts doesn’t require modifying existing code. Simply subclass the `Discount` class.
+  
+- **LSP (Liskov Substitution Principle)**:  
+    - Any `Discount` subclass can replace another without breaking functionality in `Order`.
+  
+- **ISP (Interface Segregation Principle)**:  
+    - `Discount` has a minimal interface (`apply(total)`). Clients don’t have to implement or use unnecessary methods.
+
+- **DIP (Dependency Inversion Principle)**:  
+    - `Order` depends on the `Discount` abstraction, not on concrete discount classes. This keeps the logic decoupled and more maintainable.
+
+---
+
+This format should help anyone following along with the project understand both the task and how the SOLID and OOP principles apply to each challenge. You can structure the explanations similarly for the Expert level later on!
