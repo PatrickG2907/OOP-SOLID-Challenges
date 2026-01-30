@@ -1,22 +1,18 @@
 # OOP & SOLID Challenges (Advanced Level)
 
-This repository contains a series of Object-Oriented Programming (OOP) and SOLID principle challenges to help you strengthen your understanding of software design and architecture. The challenges are grouped by difficulty level, starting with Beginner and moving toward Expert.
+## Challenge 1: Report Generation System
 
-## Advanced Level Challenges
-
-### Challenge 1: Report Generation System
-
-#### Task
+### Task
 Generate reports in:
 - PDF
 - CSV
 
-#### Objectives
+### Objectives
 - **Strategy Pattern**
 - **Dependency Inversion**
 - **Open/Closed Principle**
 
-#### Explanations
+### Explanations
 
 **OOP Principles**
 - **Encapsulation**:  
@@ -52,9 +48,9 @@ Generate reports in:
 
 ---
 
-### Challenge 2: Game Character System
+## Challenge 2: Game Character System
 
-#### Task
+### Task
 Characters:
 - Warrior
 - Mage
@@ -62,12 +58,12 @@ Characters:
 
 They have different attack behaviors and abilities.
 
-#### Objectives
+### Objectives
 - **Composition Over Inheritance**
 - **Strategy Pattern**
 - **Liskov Substitution Principle**
 
-#### Explanations
+### Explanations
 
 **OOP Principles**
 - **Abstraction**:  
@@ -109,19 +105,19 @@ They have different attack behaviors and abilities.
 
 ---
 
-### Challenge 3: File Storage System
+## Challenge 3: File Storage System
 
-#### Task
+### Task
 Store files in:
 - Local storage
 - Cloud storage
 
-#### Objectives
+### Objectives
 - **Strategy Pattern**
 - **Dependency Injection**
 - **Open/Closed Principle**
 
-#### Explanations
+### Explanations
 
 **OOP Principles**
 - **Abstraction**:  
@@ -155,9 +151,9 @@ Store files in:
 
 ---
 
-### Challenge 4: E-Commerce Shipping Calculator
+## Challenge 4: E-Commerce Shipping Calculator
 
-#### Task
+### Task
 Shipping types:
 - Standard
 - Express
@@ -165,12 +161,12 @@ Shipping types:
 
 Rules vary by destination and weight.
 
-#### Objectives
+### Objectives
 - **Strategy Pattern**
 - **Open/Closed Principle**
 - **Interface Segregation**
 
-#### Explanations
+### Explanations
 
 **OOP Principles**
 - **Encapsulation**:  
@@ -210,20 +206,20 @@ Rules vary by destination and weight.
 
 ---
 
-### Challenge 5: Authentication System
+## Challenge 5: Authentication System
 
-#### Task
+### Task
 Support:
 - Password-based login
 - OAuth
 - API tokens
 
-#### Objectives
+### Objectives
 - **Interface Segregation**
 - **Dependency Injection**
 - **Secure Responsibility Separation**
 
-#### Explanations
+### Explanations
 
 **OOP Principles**
 - **Encapsulation**:  
