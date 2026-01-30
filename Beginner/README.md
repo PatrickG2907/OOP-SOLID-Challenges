@@ -1,22 +1,18 @@
 # OOP & SOLID Challenges (Beginner Level)
 
-This repository contains a series of Object-Oriented Programming (OOP) and SOLID principle challenges to help you strengthen your understanding of software design and architecture. The challenges are grouped by difficulty level, starting with Beginner and moving towards Expert.
+## Challenge 1: User Profile Manager
 
-## Beginner Level Challenges
-
-### Challenge 1: User Profile Manager
-
-#### Task
+### Task
 Create a system to manage user profiles:
 - Store name, email, and age.
 - Update user details.
 - Display user information.
 
-#### Objectives
+### Objectives
 - **SRP (Single Responsibility Principle)**
 - **Encapsulation**
   
-#### Explanations
+### Explanations
 
 **OOP Principles**
 - **Abstraction**: 
@@ -67,21 +63,21 @@ Create a system to manage user profiles:
 
 ---
 
-### Challenge 2: Shape Area Calculator
+## Challenge 2: Shape Area Calculator
 
-#### Task
+### Task
 Implement shapes like:
 - Rectangle
 - Circle
 
 Each should calculate its area.
 
-#### Objectives
+### Objectives
 - **Inheritance**
 - **Polymorphism**
 - **Avoid if/else for shape types**
 
-#### Explanations
+### Explanations
 
 **OOP Principles**
 - **Abstraction**:  
@@ -111,19 +107,19 @@ Each should calculate its area.
 
 ---
 
-### Challenge 3: Simple Bank Account
+## Challenge 3: Simple Bank Account
 
-#### Task
+### Task
 Create a bank account that can:
 - Deposit money
 - Withdraw money
 - Show balance
 
-#### Objectives
+### Objectives
 - **Encapsulation**
 - **Validation Logic**
 
-#### Explanations
+### Explanations
 
 **OOP Principles**
 - **Encapsulation**:  
@@ -156,18 +152,18 @@ Create a bank account that can:
 
 ---
 
-### Challenge 4: Notification Sender
+## Challenge 4: Notification Sender
 
-#### Task
+### Task
 Send notifications via:
 - Email
 - SMS
 
-#### Objectives
+### Objectives
 - **Abstraction via Interfaces**
 - **Open/Closed Principle**
 
-#### Explanations
+### Explanations
 
 **OOP Principles**
 - **Encapsulation**:  
@@ -197,19 +193,19 @@ Send notifications via:
 
 ---
 
-### Challenge 5: Book Library
+## Challenge 5: Book Library
 
-#### Task
+### Task
 Create a library that:
 - Stores books
 - Allows searching by title
 - Displays available books
 
-#### Objectives
+### Objectives
 - **SRP (Single Responsibility Principle)**
 - **Open/Closed Principle**
 
-#### Explanations
+### Explanations
 
 **OOP Principles**
 - **Classes & Objects**:  
