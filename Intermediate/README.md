@@ -247,5 +247,3 @@ Orders:
     - `Order` depends on the `Discount` abstraction, not on concrete discount classes. This keeps the logic decoupled and more maintainable.
 
 ---
-
-This format should help anyone following along with the project understand both the task and how the SOLID and OOP principles apply to each challenge. You can structure the explanations similarly for the Expert level later on!
