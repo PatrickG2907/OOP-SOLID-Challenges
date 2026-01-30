@@ -1,23 +1,19 @@
 # OOP & SOLID Challenges (Intermediate Level)
 
-This repository contains a series of Object-Oriented Programming (OOP) and SOLID principle challenges to help you strengthen your understanding of software design and architecture. The challenges are grouped by difficulty level, starting with Beginner and moving toward Expert.
+## Challenge 1: Payment Processing System
 
-## Intermediate Level Challenges
-
-### Challenge 1: Payment Processing System
-
-#### Task
+### Task
 Support payments via:
 - Credit Card
 - PayPal
 - Crypto
 
-#### Objectives
+### Objectives
 - **Open/Closed Principle**
 - **Dependency Inversion**
 - **Strategy Pattern**
 
-#### Explanations
+### Explanations
 
 **OOP Principles**
 - **Abstraction**:  
@@ -47,9 +43,9 @@ Support payments via:
 
 ---
 
-### Challenge 2: Employee Salary Calculator
+## Challenge 2: Employee Salary Calculator
 
-#### Task
+### Task
 Create different employee types:
 - Full-time
 - Part-time
@@ -57,12 +53,12 @@ Create different employee types:
 
 Each calculates salary differently.
 
-#### Objectives
+### Objectives
 - **Liskov Substitution Principle**
 - **Polymorphism**
 - **Avoid Type-Checking**
 
-#### Explanations
+### Explanations
 
 **OOP Principles**
 - **Abstraction**:  
@@ -98,19 +94,19 @@ Each calculates salary differently.
 
 ---
 
-### Challenge 3: Logging Framework
+## Challenge 3: Logging Framework
 
-#### Task
+### Task
 Log messages to:
 - Console
 - File
 - Remote server
 
-#### Objectives
+### Objectives
 - **Interface Segregation**
 - **Dependency Injection**
 
-#### Explanations
+### Explanations
 
 **OOP Principles**
 - **Abstraction**:  
@@ -148,20 +144,20 @@ Log messages to:
 
 ---
 
-### Challenge 4: Smart Home Devices
+## Challenge 4: Smart Home Devices
 
-#### Task
+### Task
 Devices include:
 - Light
 - Fan
 
 Each can turn on/off, some can set values.
 
-#### Objectives
+### Objectives
 - **Interface Segregation**
 - **Avoid Forcing Unused Methods**
 
-#### Explanations
+### Explanations
 
 **OOP Principles**
 - **Encapsulation**:  
@@ -197,19 +193,19 @@ Each can turn on/off, some can set values.
 
 ---
 
-### Challenge 5: Online Order System
+## Challenge 5: Online Order System
 
-#### Task
+### Task
 Orders:
 - Have items
 - Calculate total price
 - Apply discounts
 
-#### Objectives
+### Objectives
 - **SRP (Single Responsibility Principle)**
 - **Open/Closed Principle**
 
-#### Explanations
+### Explanations
 
 **OOP Principles**
 - **Encapsulation**:  
