@@ -248,9 +248,3 @@ Create a library that:
     - `Library` depends on the abstraction `BookRepositoryInterface`, not the concrete `BookRepository`.
 
 ---
-
-## How to Use This Repository
-
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/yourusername/OOP-SOLID-Challenges.git
