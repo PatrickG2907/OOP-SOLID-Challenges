@@ -1,0 +1,30 @@
+@startuml
+
+' =========================
+' Exceptions (Domain-specific)
+' =========================
+class InvalidAmountError <<exception>>
+class InsufficientFundsError <<exception>>
+
+' =========================
+' BankAccount Domain Model
+' =========================
+class BankAccount {
+    -_balance: float
+
+    +BankAccount(balance: float = 0.0)
+
+    +deposit(amount: float): void
+    +withdraw(amount: float): void
+    +balance: float
+
+    -_validate_amount(amount: float): void
+}
+
+' =========================
+' Relationships
+' =========================
+BankAccount ..> InvalidAmountError : throws
+BankAccount ..> InsufficientFundsError : throws
+
+@enduml
