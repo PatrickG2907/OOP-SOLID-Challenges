@@ -1,0 +1,53 @@
+@startuml
+
+' =========================
+' DOMAIN
+' =========================
+class PaymentResult {
+    +success: bool
+    +message: str
+}
+
+class InvalidPaymentError <<exception>>
+
+' =========================
+' STRATEGY ABSTRACTION
+' =========================
+abstract class PaymentMethod {
+    +pay(amount: float): PaymentResult
+}
+
+class CreditCard {
+    +pay(amount: float): PaymentResult
+}
+
+class PayPal {
+    +pay(amount: float): PaymentResult
+}
+
+class Crypto {
+    +pay(amount: float): PaymentResult
+}
+
+PaymentMethod <|-- CreditCard
+PaymentMethod <|-- PayPal
+PaymentMethod <|-- Crypto
+
+' =========================
+' HIGH-LEVEL POLICY
+' =========================
+class PaymentProcessor {
+    -_payment_method: PaymentMethod
+
+    +process(amount: float): PaymentResult
+    -_validate(amount: float): void
+}
+
+' =========================
+' DEPENDENCIES
+' =========================
+PaymentProcessor --> PaymentMethod : uses
+PaymentMethod ..> PaymentResult : returns
+PaymentProcessor ..> InvalidPaymentError : throws
+
+@enduml
