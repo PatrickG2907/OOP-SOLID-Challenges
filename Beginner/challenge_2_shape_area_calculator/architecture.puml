@@ -1,0 +1,35 @@
+@startuml
+
+' =========================
+' Abstraction
+' =========================
+abstract class Shape {
+    +area(): float
+}
+
+' =========================
+' Rectangle
+' =========================
+class Rectangle {
+    -_height: float
+    -_width: float
+
+    +area(): float
+}
+
+' =========================
+' Circle
+' =========================
+class Circle {
+    -_radius: float
+
+    +area(): float
+}
+
+' =========================
+' Inheritance relationships
+' =========================
+Shape <|-- Rectangle
+Shape <|-- Circle
+
+@enduml
