@@ -1,0 +1,70 @@
+@startuml
+
+' =========================
+' INTERFACES (ISP)
+' =========================
+interface Switchable {
+    +turn_on(): void
+    +turn_off(): void
+    +is_on: bool
+}
+
+interface Adjustable {
+    +set_value(value: int): void
+    +value: int
+}
+
+' =========================
+' BEHAVIOR COMPONENTS (Composition)
+' =========================
+class OnOffBehavior {
+    -_state: bool
+
+    +turn_on(): void
+    +turn_off(): void
+    +is_on: bool
+}
+
+class ValueBehavior {
+    -_value: int
+    -_min: int
+    -_max: int
+
+    +set_value(value: int): void
+    +value: int
+}
+
+' =========================
+' DEVICES
+' =========================
+class Light {
+    -_power: OnOffBehavior
+
+    +turn_on(): void
+    +turn_off(): void
+    +is_on: bool
+}
+
+class Fan {
+    -_power: OnOffBehavior
+    -_speed: ValueBehavior
+
+    +turn_on(): void
+    +turn_off(): void
+    +set_value(value: int): void
+    +is_on: bool
+    +value: int
+}
+
+' =========================
+' RELATIONSHIPS
+' =========================
+Switchable <|.. Light
+Switchable <|.. Fan
+Adjustable <|.. Fan
+
+Light --> OnOffBehavior : composition
+Fan --> OnOffBehavior : composition
+Fan --> ValueBehavior : composition
+
+@enduml
