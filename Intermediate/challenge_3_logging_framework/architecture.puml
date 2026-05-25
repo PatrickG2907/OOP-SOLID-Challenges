@@ -1,0 +1,47 @@
+@startuml
+
+' =========================
+' STRATEGY ABSTRACTION
+' =========================
+abstract class LoggerStrategy {
+    +log(message: str): void
+}
+
+' =========================
+' CONCRETE STRATEGIES
+' =========================
+class ConsoleLogger {
+    +log(message: str): void
+}
+
+class FileLogger {
+    -filename: str
+    +log(message: str): void
+}
+
+class RemoteLogger {
+    +log(message: str): void
+}
+
+LoggerStrategy <|-- ConsoleLogger
+LoggerStrategy <|-- FileLogger
+LoggerStrategy <|-- RemoteLogger
+
+' =========================
+' CONTEXT (ORCHESTRATOR)
+' =========================
+class Logger {
+    -strategies: List<LoggerStrategy>
+
+    +log_message(message: str): void
+    -_validate_message(message: str): void
+    +add_strategy(strategy: LoggerStrategy): void
+    +remove_strategy(strategy: LoggerStrategy): void
+}
+
+' =========================
+' RELATIONSHIPS
+' =========================
+Logger --> LoggerStrategy : uses (aggregation)
+
+@enduml
