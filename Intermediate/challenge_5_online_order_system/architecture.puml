@@ -1,0 +1,57 @@
+@startuml
+
+' =========================
+' DOMAIN MODEL
+' =========================
+class Item {
+    +name: str
+    +price: float
+    +quantity: int
+}
+
+class Items {
+    -_items: List<Item>
+
+    +add_item(item: Item): void
+    +remove_item(item: Item): void
+    +total(): float
+    +__iter__(): Iterator
+}
+
+Items --> Item : contains
+
+' =========================
+' DISCOUNT STRATEGY (OCP + DIP)
+' =========================
+abstract class Discount {
+    +apply(total: float): float
+}
+
+class PercentageDiscount {
+    -_rate: float
+    +apply(total: float): float
+}
+
+class ThresholdDiscount {
+    -_threshold: float
+    -_rate: float
+    +apply(total: float): float
+}
+
+Discount <|-- PercentageDiscount
+Discount <|-- ThresholdDiscount
+
+' =========================
+' ORDER (ORCHESTRATOR)
+' =========================
+class Order {
+    -_items: Items
+    -_discount: Discount
+
+    +total(): float
+}
+
+Order --> Items : uses
+Order --> Discount : uses (optional)
+
+@enduml
