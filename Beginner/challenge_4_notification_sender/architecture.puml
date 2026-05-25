@@ -1,0 +1,36 @@
+@startuml
+
+' =========================
+' Exception
+' =========================
+class InvalidNotificationError <<exception>>
+
+' =========================
+' Abstraction (Template Method pattern)
+' =========================
+abstract class Notification {
+    +send(message: str): void
+    -_validate(message: str): void
+    {abstract} -_send(message: str): void
+}
+
+' =========================
+' Concrete implementations
+' =========================
+class Email {
+    -_send(message: str): void
+}
+
+class SMS {
+    -_send(message: str): void
+}
+
+Notification <|-- Email
+Notification <|-- SMS
+
+' =========================
+' Exception dependency
+' =========================
+Notification ..> InvalidNotificationError : throws
+
+@enduml
