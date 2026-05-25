@@ -1,0 +1,31 @@
+@startuml
+
+class User {
+    -_name: str
+    -_email: str
+    -_age: int
+
+    +get_name(): str
+    +set_name(value: str): void
+
+    +get_email(): str
+    +set_email(value: str): void
+
+    +get_age(): int
+    +set_age(value: int): void
+
+    +get_info(): str
+}
+
+note right of User
+Encapsulation:
+- Private fields (_name, _email, _age)
+- Controlled access via properties
+
+Validation rules:
+- name cannot be empty
+- email must contain "@"
+- age must be >= 0
+end note
+
+@enduml
