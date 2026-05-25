@@ -1,0 +1,46 @@
+@startuml
+
+' =========================
+' ABSTRACTION (Strategy)
+' =========================
+abstract class PayPolicy {
+    +calculate_salary(): int
+}
+
+' =========================
+' CONCRETE STRATEGIES
+' =========================
+class FullTimePay {
+    -_monthly_salary: int
+    +calculate_salary(): int
+}
+
+class PartTimePay {
+    -_hourly_rate: int
+    -_hours: int
+    +calculate_salary(): int
+}
+
+class ContractorPay {
+    -_base_pay: int
+    -_bonus: int
+    +calculate_salary(): int
+}
+
+PayPolicy <|-- FullTimePay
+PayPolicy <|-- PartTimePay
+PayPolicy <|-- ContractorPay
+
+' =========================
+' CONTEXT (Composition)
+' =========================
+class Employee {
+    -_name: str
+    -_pay_policy: PayPolicy
+
+    +get_salary(): int
+}
+
+Employee --> PayPolicy : uses
+
+@enduml
