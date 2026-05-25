@@ -1,0 +1,70 @@
+@startuml
+
+' =========================
+' Domain Entity
+' =========================
+class Book {
+    -_title: str
+    -_author: str
+    +available: bool
+
+    +title: str
+    +author: str
+}
+
+' =========================
+' Strategy Pattern
+' =========================
+abstract class SearchStrategy {
+    +search(books: List<Book>, query: str): List<Book>
+}
+
+class TitleSearchStrategy {
+    +search(books: List<Book>, query: str): List<Book>
+}
+
+class AuthorSearchStrategy {
+    +search(books: List<Book>, query: str): List<Book>
+}
+
+SearchStrategy <|-- TitleSearchStrategy
+SearchStrategy <|-- AuthorSearchStrategy
+
+' =========================
+' Repository Layer
+' =========================
+interface BookRepositoryInterface {
+    +add_book(book: Book): void
+    +list_books(): List<Book>
+}
+
+class BookRepository {
+    -_books: List<Book>
+
+    +add_book(book: Book): void
+    +list_books(): List<Book>
+}
+
+BookRepositoryInterface <|.. BookRepository
+
+' =========================
+' Library (High-level module)
+' =========================
+class Library {
+    -repository: BookRepositoryInterface
+
+    +add_book(book: Book): void
+    +get_available_books(): List<Book>
+    +search_books(query: str, strategy: SearchStrategy): List<Book>
+}
+
+' =========================
+' Correct Dependencies
+' =========================
+Library --> BookRepositoryInterface : uses
+Library --> SearchStrategy : uses
+Library --> Book : manages
+
+SearchStrategy ..> Book : uses (search input/output)
+
+@enduml
