@@ -1,0 +1,74 @@
+@startuml
+
+' =========================
+' DATA CLASSES
+' =========================
+class ShippingInfo {
+    + destination: str
+    + weight: float
+}
+
+class Rule {
+    + limits: List
+    + prices: List[float]
+    + delivery_times: List[int]
+}
+
+' =========================
+' SHIPPING RULE STRATEGY
+' =========================
+abstract class ShippingRule {
+    - _rule: Rule
+    + ShippingRule(rule: Rule)
+    + apply(info: ShippingInfo) : (float, int)
+    + rule_error() : str
+}
+
+ShippingRule --> Rule : uses
+
+class WeightRule {
+    + apply(info: ShippingInfo) : (float, int)
+    + rule_error() : str
+}
+
+class DestinationRule {
+    + apply(info: ShippingInfo) : (float, int)
+    + rule_error() : str
+}
+
+ShippingRule <|-- WeightRule
+ShippingRule <|-- DestinationRule
+
+WeightRule --> ShippingInfo : evaluates
+DestinationRule --> ShippingInfo : evaluates
+
+' =========================
+' SHIPPING TYPE STRATEGY
+' =========================
+abstract class ShippingType {
+    + info: ShippingInfo
+    + rules: List[ShippingRule]
+    + ShippingType(info: ShippingInfo, rules: List[ShippingRule])
+    + calculate() : (float, int)
+}
+
+ShippingType --> ShippingInfo : uses
+ShippingType --> ShippingRule : uses
+
+class StandardShipping {
+    + calculate() : (float, int)
+}
+
+class ExpressShipping {
+    + calculate() : (float, int)
+}
+
+class InternationalShipping {
+    + calculate() : (float, int)
+}
+
+ShippingType <|-- StandardShipping
+ShippingType <|-- ExpressShipping
+ShippingType <|-- InternationalShipping
+
+@enduml
