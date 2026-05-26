@@ -1,0 +1,70 @@
+@startuml
+
+' =========================
+' Core Domain Model
+' =========================
+class Applicant {
+    +loan_amount: float
+    +credit_score: int
+    +suspicious_activity: bool
+    +__post_init__(): void
+}
+
+' =========================
+' Rule Interface (Specification Pattern)
+' =========================
+abstract class Rule {
+    +is_satisfied(applicant: Applicant): bool
+}
+
+Rule <|-- LoanAmountRule
+Rule <|-- CreditScoreRule
+Rule <|-- FraudCheckRule
+Rule <|-- AndSpecification
+
+' =========================
+' Concrete Rules
+' =========================
+class LoanAmountRule {
+    +max_amount: float
+    +__post_init__(): void
+    +is_satisfied(applicant: Applicant): bool
+}
+
+class CreditScoreRule {
+    +min_score: int
+    +__post_init__(): void
+    +is_satisfied(applicant: Applicant): bool
+}
+
+class FraudCheckRule {
+    +is_satisfied(applicant: Applicant): bool
+}
+
+' =========================
+' Composite Specification
+' =========================
+class AndSpecification {
+    -rules: Rule[*]
+    +is_satisfied(applicant: Applicant): bool
+}
+
+AndSpecification o-- "many" Rule : contains
+
+' =========================
+' Service Layer
+' =========================
+class LoanApprovalService {
+    -rule: Rule
+    +approve(applicant: Applicant): bool
+}
+
+LoanApprovalService ..> Rule
+LoanApprovalService ..> Applicant
+
+' =========================
+' Relationships to Applicant
+' =========================
+Rule ..> Applicant
+
+@enduml
