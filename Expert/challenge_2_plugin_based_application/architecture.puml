@@ -1,0 +1,47 @@
+@startuml
+
+title Plugin Architecture (Teaching View)
+
+class Plugin {
+    {abstract} +run(data: str) : str
+}
+
+class Application {
+    -_plugins: list<Plugin>
+
+    +register_plugin(plugin: Plugin) : void
+    +run(data: str) : void
+}
+
+class load_plugins {
+    +load_plugins(app: Application, package_name: str) : void
+}
+
+class UppercasePlugin {
+    +run(data: str) : str
+}
+
+class ReversePlugin {
+    +run(data: str) : str
+}
+
+' =========================
+' POLYMORPHISM
+' =========================
+Plugin <|-- UppercasePlugin
+Plugin <|-- ReversePlugin
+
+' =========================
+' CORE PLUGIN SYSTEM FLOW
+' =========================
+
+' Application stores plugins (runtime composition)
+Application o-- Plugin : stores runtime plugins
+
+' Dependency inversion (Application depends on abstraction)
+Application ..> Plugin : depends on abstraction
+
+' Plugin registration flow
+load_plugins --> Application : registers plugins
+
+@enduml
