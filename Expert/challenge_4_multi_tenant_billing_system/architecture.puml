@@ -1,0 +1,80 @@
+@startuml
+
+' =======================
+' Core Data Model
+' =======================
+class Invoice {
+    +customer_name: str
+    +usage: float
+    +cost: Decimal
+    +discount: Decimal
+    +total: Decimal
+}
+
+' =======================
+' Pricing Strategy
+' =======================
+abstract class PricingModel {
+    +calculate(usage: float): Decimal
+}
+
+class FlatRatePricing {
+    -rate: Decimal
+    +calculate(usage: float): Decimal
+}
+
+class UsageBasedPricing {
+    -price_per_unit: Decimal
+    +calculate(usage: float): Decimal
+}
+
+PricingModel <|-- FlatRatePricing
+PricingModel <|-- UsageBasedPricing
+
+' =======================
+' Customer Hierarchy
+' =======================
+abstract class Customer {
+    +name: str
+    +get_discount(): Decimal
+}
+
+class RegularCustomer {
+    +get_discount(): Decimal
+}
+
+class PremiumCustomer {
+    {static} DISCOUNT: Decimal
+    +get_discount(): Decimal
+}
+
+Customer <|-- RegularCustomer
+Customer <|-- PremiumCustomer
+
+' =======================
+' Factories
+' =======================
+class CustomerFactory {
+    {static} create_customer(customer_type: str, name: str): Customer
+}
+
+class PricingFactory {
+    {static} create_pricing(pricing_type: str, **kwargs): PricingModel
+}
+
+CustomerFactory ..> Customer
+PricingFactory ..> PricingModel
+
+' =======================
+' Billing Service
+' =======================
+class BillingService {
+    -invoices: List<Invoice>
+    +generate_invoice(customer: Customer, pricing_model: PricingModel, usage: float): Invoice
+}
+
+BillingService "1" o-- "*" Invoice
+BillingService ..> Customer
+BillingService ..> PricingModel
+
+@enduml
