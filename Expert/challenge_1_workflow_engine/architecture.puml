@@ -1,0 +1,46 @@
+@startuml
+
+' =========================
+' STEP INTERFACE
+' =========================
+abstract class Step {
+    + execute(context: dict) : str
+}
+
+' =========================
+' CONCRETE STEPS
+' =========================
+class StepA {
+    + execute(context: dict) : str
+}
+
+class StepB {
+    + execute(context: dict) : str
+}
+
+class StepC {
+    + execute(context: dict) : str
+}
+
+Step <|-- StepA
+Step <|-- StepB
+Step <|-- StepC
+
+
+' =========================
+' FLOW ENGINE
+' =========================
+class FlowEngine {
+    - flow_map: Dict[Step, Dict[str, Optional[Step]]]
+    - start_step: Optional[Step]
+
+    + FlowEngine()
+    + set_start(step: Step)
+    + add_transition(from_step: Step, result_key: str, to_step: Optional[Step])
+    + run(context: dict)
+}
+
+FlowEngine --> Step : executes
+FlowEngine --> Step : stores transitions
+
+@enduml
