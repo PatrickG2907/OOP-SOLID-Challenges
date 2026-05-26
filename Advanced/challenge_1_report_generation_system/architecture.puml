@@ -1,0 +1,43 @@
+@startuml
+
+' ---------------------------
+' ABSTRACT STRATEGY CLASS
+' ---------------------------
+abstract class ReportStrategy {
+    - _name: str
+    + ReportStrategy(name: str)
+    + name: str
+    + generate_report(output_dir: str = "."): str
+}
+
+' ---------------------------
+' CONCRETE CLASSES
+' ---------------------------
+class PdfReport {
+    + generate_report(output_dir: str = "."): str
+}
+
+class CsvReport {
+    + generate_report(output_dir: str = "."): str
+}
+
+' ---------------------------
+' CONTEXT / MANAGER
+' ---------------------------
+class ReportManager {
+    - _reports: List[ReportStrategy]
+    + ReportManager()
+    + add_report(report: ReportStrategy)
+    + generate_all(output_dir: str = "."): List[str]
+}
+
+' ---------------------------
+' RELATIONSHIPS
+' ---------------------------
+
+ReportStrategy <|-- PdfReport
+ReportStrategy <|-- CsvReport
+
+ReportManager o-- ReportStrategy : manages
+
+@enduml
