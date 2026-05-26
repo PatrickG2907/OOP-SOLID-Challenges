@@ -1,0 +1,88 @@
+@startuml
+
+' -----------------------
+' ATTACK STRATEGY
+' -----------------------
+abstract class Attack {
+    + attack(character) : int
+}
+
+class Sword {
+    + attack(character) : int
+}
+
+class Bow {
+    + attack(character) : int
+}
+
+class Spell {
+    + attack(character) : int
+}
+
+Attack <|-- Sword
+Attack <|-- Bow
+Attack <|-- Spell
+
+' -----------------------
+' ABILITY STRATEGY
+' -----------------------
+abstract class Ability {
+    + use(character)
+}
+
+class Recover {
+    - heal_amount : int
+    + Recover(heal_amount: int)
+    + use(character)
+}
+
+class IncreaseRange {
+    - increase_amount : int
+    + IncreaseRange(increase_amount: int)
+    + use(character)
+}
+
+Ability <|-- Recover
+Ability <|-- IncreaseRange
+
+' -----------------------
+' CHARACTER BASE CLASS
+' -----------------------
+class Character {
+    + name : str
+    + health : int
+    + power : int
+    + attack_range : int
+    + distance_to_target : int
+
+    - _attack : Attack
+    - _ability : Ability
+
+    + Character(name: str, health: int, power: int, attack_range: int, attack: Attack, ability: Ability)
+    + perform_attack() : int
+    + use_ability()
+}
+
+Character --> Attack : uses
+Character --> Ability : uses
+
+' -----------------------
+' CONCRETE CHARACTERS
+' -----------------------
+class Warrior {
+    + Warrior(name: str)
+}
+
+class Archer {
+    + Archer(name: str)
+}
+
+class Mage {
+    + Mage(name: str)
+}
+
+Character <|-- Warrior
+Character <|-- Archer
+Character <|-- Mage
+
+@enduml
