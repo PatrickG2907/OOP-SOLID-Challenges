@@ -1,0 +1,70 @@
+@startuml
+
+' =========================
+' STORAGE ABSTRACTION
+' =========================
+abstract class Storage {
+    + save_file(filename: str, data: bytes) : None
+    + read_file(filename: str) : bytes
+}
+
+class LocalStorage {
+    - base_path : str
+    + LocalStorage(base_path: str)
+    + save_file(filename: str, data: bytes) : None
+    + read_file(filename: str) : bytes
+}
+
+class CloudStorage {
+    - cloud_client
+    - bucket_name : str
+    + CloudStorage(cloud_client, bucket_name: str)
+    + save_file(filename: str, data: bytes) : None
+    + read_file(filename: str) : bytes
+}
+
+Storage <|-- LocalStorage
+Storage <|-- CloudStorage
+
+' CloudStorage uses injected runtime object (as defined in usage)
+CloudStorage --> DummyCloudClient : uses
+
+
+' =========================
+' VALIDATORS
+' =========================
+class FilenameValidator {
+    {static} + validate(filename: str) : bool
+}
+
+class DirectoryValidator {
+    {static} + validate(path: str) : bool
+}
+
+LocalStorage --> DirectoryValidator : validates
+FileManager --> FilenameValidator : validates
+
+
+' =========================
+' FILE MANAGER
+' =========================
+class FileManager {
+    - storage
+    + FileManager(storage)
+    + save(filename: str, data: bytes)
+    + read(filename: str) : bytes
+}
+
+FileManager --> Storage : depends on
+
+
+' =========================
+' DUMMY CLOUD CLIENT
+' =========================
+class DummyCloudClient {
+    - store
+    + upload(bucket, key, data)
+    + download(bucket, key)
+}
+
+@enduml
