@@ -1,0 +1,61 @@
+@startuml
+
+abstract class Event {
+    +name(): str
+}
+
+class UserRegistered {
+    +username: str
+    +name(): str
+}
+
+class OrderPlaced {
+    +order_id: int
+    +name(): str
+}
+
+class PaymentFailed {
+    +order_id: int
+    +reason: str
+    +name(): str
+}
+
+Event <|-- UserRegistered
+Event <|-- OrderPlaced
+Event <|-- PaymentFailed
+
+
+abstract class EventListener {
+    +handle(event: Event): void
+}
+
+class EmailNotifier {
+    +handle(event: Event): void
+}
+
+class AnalyticsTracker {
+    +handle(event: Event): void
+}
+
+class FraudDetector {
+    +handle(event: Event): void
+}
+
+EventListener <|-- EmailNotifier
+EventListener <|-- AnalyticsTracker
+EventListener <|-- FraudDetector
+
+
+class EventManager {
+    -listeners: List<EventListener>
+    +register_listener(listener: EventListener): void
+    +notify(event: Event): void
+}
+
+EventManager o-- EventListener
+
+' Explicit dependency for teaching DIP / data flow clarity
+EventListener ..> Event : handles
+EventManager ..> Event : publishes
+
+@enduml
