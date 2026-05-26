@@ -1,0 +1,106 @@
+@startuml
+
+' =========================
+' CORE DOMAIN
+' =========================
+class User {
+    + username: str
+    - _password: str
+    + User(username: str, password: str)
+    + check_password(password: str) : bool
+}
+
+' =========================
+' REPOSITORIES (ABSTRACTIONS)
+' =========================
+abstract class UserRepository {
+    + find_by_username(username: str)
+}
+
+abstract class TokenRepository {
+    + is_valid(token: str) : bool
+}
+
+class InMemoryUserRepository {
+    + users: dict
+    + InMemoryUserRepository()
+    + find_by_username(username: str)
+}
+
+class InMemoryTokenRepository {
+    + valid_tokens: set
+    + InMemoryTokenRepository()
+    + is_valid(token: str) : bool
+}
+
+UserRepository <|-- InMemoryUserRepository
+TokenRepository <|-- InMemoryTokenRepository
+
+InMemoryUserRepository --> User : creates
+
+
+' =========================
+' OAUTH CLIENT
+' =========================
+class FakeOAuthClient {
+    + get_authorize_url() : str
+    + verify_token(token: str) : bool
+}
+
+
+' =========================
+' AUTHENTICATOR ABSTRACTIONS
+' =========================
+abstract class Authenticator {
+    + authenticate(credentials: Dict) : bool
+}
+
+abstract class OAuthAuthenticator {
+    + authenticate(credentials: Dict) : bool
+    + get_redirect_url() : str
+}
+
+Authenticator <|-- OAuthAuthenticator
+
+
+' =========================
+' CONCRETE AUTHENTICATORS
+' =========================
+class PasswordAuthenticator {
+    + PasswordAuthenticator(user_repository: UserRepository)
+    + authenticate(credentials: Dict) : bool
+}
+
+class OAuthGoogleAuthenticator {
+    + OAuthGoogleAuthenticator(oauth_client: FakeOAuthClient)
+    + authenticate(credentials: Dict) : bool
+    + get_redirect_url() : str
+}
+
+class ApiTokenAuthenticator {
+    + ApiTokenAuthenticator(token_repository: TokenRepository)
+    + authenticate(credentials: Dict) : bool
+}
+
+Authenticator <|-- PasswordAuthenticator
+Authenticator <|-- ApiTokenAuthenticator
+OAuthAuthenticator <|-- OAuthGoogleAuthenticator
+
+PasswordAuthenticator --> UserRepository : uses
+ApiTokenAuthenticator --> TokenRepository : uses
+OAuthGoogleAuthenticator --> FakeOAuthClient : uses
+
+
+' =========================
+' AUTH SERVICE
+' =========================
+class AuthenticationService {
+    + authenticators: Dict[str, Authenticator]
+    + AuthenticationService(authenticators: Dict[str, Authenticator])
+    + login(auth_type: str, credentials: Dict) : bool
+}
+
+AuthenticationService --> Authenticator : depends on
+
+
+@enduml
