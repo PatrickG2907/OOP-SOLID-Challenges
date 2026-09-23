@@ -1,0 +1,21 @@
+@startuml
+
+class User {
+  - name_ : std::string
+  - email_ : std::string
+  - age_ : int
+
+  - {static} validate_name(name : const std::string&) : void
+  - {static} validate_email(email : const std::string&) : void
+  - {static} validate_age(age : int) : void
+
+  + User(name : std::string, email : std::string, age : int)
+  + name() : const std::string&
+  + email() : const std::string&
+  + age() : int
+  + set_name(name : std::string) : void
+  + set_email(email : std::string) : void
+  + set_age(age : int) : void
+}
+
+@enduml
