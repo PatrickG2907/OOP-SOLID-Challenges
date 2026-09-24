@@ -1,0 +1,34 @@
+@startuml
+
+abstract class PaymentStrategy {
+  + ~PaymentStrategy()
+  + pay(amount_cents : std::int64_t) : void
+}
+
+class CreditCardPayment {
+  + pay(amount_cents : std::int64_t) : void
+}
+
+class PayPalPayment {
+  + pay(amount_cents : std::int64_t) : void
+}
+
+class CryptoPayment {
+  + pay(amount_cents : std::int64_t) : void
+}
+
+class PaymentProcessor {
+  - strategy_ : std::unique_ptr<PaymentStrategy>
+
+  + PaymentProcessor(strategy : std::unique_ptr<PaymentStrategy>)
+  + process_payment(amount_cents : std::int64_t) : void
+  + set_strategy(strategy : std::unique_ptr<PaymentStrategy>) : void
+}
+
+PaymentStrategy <|-- CreditCardPayment
+PaymentStrategy <|-- PayPalPayment
+PaymentStrategy <|-- CryptoPayment
+
+PaymentProcessor *-- PaymentStrategy : owns
+
+@enduml
