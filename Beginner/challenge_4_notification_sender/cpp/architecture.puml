@@ -1,0 +1,19 @@
+@startuml
+
+abstract class NotificationSender {
+  + ~NotificationSender()
+  + send(recipient : const std::string&, message : const std::string&) : void
+}
+
+class EmailSender {
+  + send(recipient : const std::string&, message : const std::string&) : void
+}
+
+class SmsSender {
+  + send(recipient : const std::string&, message : const std::string&) : void
+}
+
+NotificationSender <|-- EmailSender
+NotificationSender <|-- SmsSender
+
+@enduml
