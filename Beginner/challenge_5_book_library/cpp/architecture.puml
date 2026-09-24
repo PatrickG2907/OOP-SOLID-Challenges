@@ -1,0 +1,24 @@
+@startuml
+
+class Book {
+  - title_ : std::string
+  - available_ : bool
+
+  + Book(title : std::string)
+  + title() : const std::string&
+  + is_available() : bool
+  + borrow() : void
+  + return_book() : void
+}
+
+class Library {
+  - books_ : std::vector<Book>
+
+  + add_book(book : Book) : void
+  + find_by_title(title : const std::string&) : const Book*
+  + books() : const std::vector<Book>&
+}
+
+Library "1" *-- "0..*" Book : stores
+
+@enduml
