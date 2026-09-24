@@ -1,0 +1,11 @@
+@startuml
+
+class BankAccount {
+  - balance_cents_ : std::int64_t
+
+  + deposit(amount_cents : std::int64_t) : void
+  + withdraw(amount_cents : std::int64_t) : void
+  + balance() : std::int64_t
+}
+
+@enduml
