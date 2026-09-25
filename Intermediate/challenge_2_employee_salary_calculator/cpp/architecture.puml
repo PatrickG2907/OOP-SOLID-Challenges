@@ -1,0 +1,37 @@
+@startuml
+
+abstract class Employee {
+  + ~Employee()
+  + salary() : std::int64_t
+}
+
+class FullTimeEmployee {
+  - monthly_salary_cents_ : std::int64_t
+
+  + FullTimeEmployee(monthly_salary_cents : std::int64_t)
+  + salary() : std::int64_t
+}
+
+class PartTimeEmployee {
+  - hourly_rate_cents_ : std::int64_t
+  - hours_worked_ : int
+
+  + PartTimeEmployee(
+      hourly_rate_cents : std::int64_t,
+      hours_worked : int
+    )
+  + salary() : std::int64_t
+}
+
+class Contractor {
+  - contract_payment_cents_ : std::int64_t
+
+  + Contractor(contract_payment_cents : std::int64_t)
+  + salary() : std::int64_t
+}
+
+Employee <|-- FullTimeEmployee
+Employee <|-- PartTimeEmployee
+Employee <|-- Contractor
+
+@enduml
