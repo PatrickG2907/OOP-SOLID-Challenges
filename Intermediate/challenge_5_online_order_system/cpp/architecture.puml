@@ -1,0 +1,56 @@
+@startuml
+
+class Item {
+  - name_ : std::string
+  - price_cents_ : std::int64_t
+
+  + Item(name : std::string, price_cents : std::int64_t)
+  + name() : const std::string&
+  + price() : std::int64_t
+}
+
+class Order {
+  - items_ : std::vector<Item>
+
+  + add_item(item : Item) : void
+  + subtotal() : std::int64_t
+  + items() : const std::vector<Item>&
+}
+
+abstract class DiscountPolicy {
+  + ~DiscountPolicy()
+  + discount(subtotal_cents : std::int64_t) : std::int64_t
+}
+
+class NoDiscount {
+  + discount(subtotal_cents : std::int64_t) : std::int64_t
+}
+
+class PercentageDiscount {
+  - percentage_ : int
+
+  + PercentageDiscount(percentage : int)
+  + discount(subtotal_cents : std::int64_t) : std::int64_t
+}
+
+class FixedDiscount {
+  - discount_cents_ : std::int64_t
+
+  + FixedDiscount(discount_cents : std::int64_t)
+  + discount(subtotal_cents : std::int64_t) : std::int64_t
+}
+
+class OrderCalculator {
+  + total(order : const Order&, discount_policy : const DiscountPolicy&) : std::int64_t
+}
+
+Order "1" *-- "0..*" Item : stores
+
+DiscountPolicy <|-- NoDiscount
+DiscountPolicy <|-- PercentageDiscount
+DiscountPolicy <|-- FixedDiscount
+
+OrderCalculator --> Order : uses
+OrderCalculator --> DiscountPolicy : uses
+
+@enduml
