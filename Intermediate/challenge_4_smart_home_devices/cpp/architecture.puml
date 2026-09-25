@@ -1,0 +1,34 @@
+@startuml
+
+abstract class Switchable {
+  + ~Switchable()
+  + turn_on() : void
+  + turn_off() : void
+}
+
+abstract class Adjustable {
+  + ~Adjustable()
+  + set_value(value : int) : void
+}
+
+class Light {
+  - is_on_ : bool
+
+  + turn_on() : void
+  + turn_off() : void
+}
+
+class Fan {
+  - is_on_ : bool
+  - speed_ : int
+
+  + turn_on() : void
+  + turn_off() : void
+  + set_value(speed : int) : void
+}
+
+Switchable <|-- Light
+Switchable <|-- Fan
+Adjustable <|-- Fan
+
+@enduml
