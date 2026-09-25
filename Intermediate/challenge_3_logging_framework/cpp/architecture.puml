@@ -1,0 +1,39 @@
+@startuml
+
+abstract class Logger {
+  + ~Logger()
+  + log(message : std::string_view) : void
+}
+
+class ConsoleLogger {
+  + log(message : std::string_view) : void
+}
+
+class FileLogger {
+  - file_ : std::ofstream
+
+  + FileLogger(filename : const std::string&)
+  + log(message : std::string_view) : void
+}
+
+class RemoteLogger {
+  - endpoint_ : std::string
+
+  + RemoteLogger(endpoint : std::string)
+  + log(message : std::string_view) : void
+}
+
+class Application {
+  - logger_ : Logger&
+
+  + Application(logger : Logger&)
+  + run() : void
+}
+
+Logger <|-- ConsoleLogger
+Logger <|-- FileLogger
+Logger <|-- RemoteLogger
+
+Application --> Logger : uses
+
+@enduml
