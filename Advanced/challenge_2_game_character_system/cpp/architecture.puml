@@ -1,0 +1,65 @@
+@startuml
+
+abstract class AttackBehavior {
+  + ~AttackBehavior()
+  + attack(character_name : std::string_view) : void
+}
+
+class SwordAttack {
+  + attack(character_name : std::string_view) : void
+}
+
+class SpellAttack {
+  + attack(character_name : std::string_view) : void
+}
+
+class BowAttack {
+  + attack(character_name : std::string_view) : void
+}
+
+abstract class AbilityBehavior {
+  + ~AbilityBehavior()
+  + use(character_name : std::string_view) : void
+}
+
+class ShieldBlock {
+  + use(character_name : std::string_view) : void
+}
+
+class Teleport {
+  + use(character_name : std::string_view) : void
+}
+
+class QuickShot {
+  + use(character_name : std::string_view) : void
+}
+
+class Character {
+  - name_ : std::string
+  - attack_behavior_ : std::unique_ptr<AttackBehavior>
+  - ability_behavior_ : std::unique_ptr<AbilityBehavior>
+
+  + Character(
+      name : std::string,
+      attack_behavior : std::unique_ptr<AttackBehavior>,
+      ability_behavior : std::unique_ptr<AbilityBehavior>
+    )
+  + name() : const std::string&
+  + attack() : void
+  + use_ability() : void
+  + set_attack_behavior(attack_behavior : std::unique_ptr<AttackBehavior>) : void
+  + set_ability_behavior(ability_behavior : std::unique_ptr<AbilityBehavior>) : void
+}
+
+AttackBehavior <|-- SwordAttack
+AttackBehavior <|-- SpellAttack
+AttackBehavior <|-- BowAttack
+
+AbilityBehavior <|-- ShieldBlock
+AbilityBehavior <|-- Teleport
+AbilityBehavior <|-- QuickShot
+
+Character *-- AttackBehavior : owns
+Character *-- AbilityBehavior : owns
+
+@enduml
