@@ -1,0 +1,32 @@
+@startuml
+
+abstract class FileStorage {
+  + ~FileStorage()
+  + store(filename : const std::string&, content : std::string_view) : void
+}
+
+class LocalStorage {
+  + store(filename : const std::string&, content : std::string_view) : void
+}
+
+class CloudStorage {
+  - endpoint_ : std::string
+
+  + CloudStorage(endpoint : std::string)
+  + store(filename : const std::string&, content : std::string_view) : void
+}
+
+class FileManager {
+  - storage_ : FileStorage*
+
+  + FileManager(storage : FileStorage&)
+  + set_storage(storage : FileStorage&) : void
+  + save(filename : const std::string&, content : std::string_view) : void
+}
+
+FileStorage <|-- LocalStorage
+FileStorage <|-- CloudStorage
+
+FileManager --> FileStorage : uses
+
+@enduml
