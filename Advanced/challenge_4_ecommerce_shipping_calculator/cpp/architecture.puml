@@ -1,0 +1,67 @@
+@startuml
+
+class Shipment {
+  - weight_grams_ : std::int64_t
+
+  + Shipment(weight_grams : std::int64_t)
+  + weight_grams() : std::int64_t
+}
+
+abstract class ShippingStrategy {
+  + ~ShippingStrategy()
+  + cost_for_weight(kilograms : std::int64_t) : std::int64_t
+}
+
+class StandardShipping {
+  + cost_for_weight(kilograms : std::int64_t) : std::int64_t
+}
+
+class ExpressShipping {
+  + cost_for_weight(kilograms : std::int64_t) : std::int64_t
+}
+
+class InternationalShipping {
+  + cost_for_weight(kilograms : std::int64_t) : std::int64_t
+}
+
+abstract class DestinationPolicy {
+  + ~DestinationPolicy()
+  + surcharge(kilograms : std::int64_t) : std::int64_t
+}
+
+class DomesticDestination {
+  + surcharge(kilograms : std::int64_t) : std::int64_t
+}
+
+class EuropeDestination {
+  + surcharge(kilograms : std::int64_t) : std::int64_t
+}
+
+class OverseasDestination {
+  + surcharge(kilograms : std::int64_t) : std::int64_t
+}
+
+class ShippingCalculator {
+  - strategy_ : const ShippingStrategy*
+
+  + ShippingCalculator(strategy : const ShippingStrategy&)
+  + set_strategy(strategy : const ShippingStrategy&) : void
+  + calculate(
+      shipment : const Shipment&,
+      destination : const DestinationPolicy&
+    ) : std::int64_t
+}
+
+ShippingStrategy <|-- StandardShipping
+ShippingStrategy <|-- ExpressShipping
+ShippingStrategy <|-- InternationalShipping
+
+DestinationPolicy <|-- DomesticDestination
+DestinationPolicy <|-- EuropeDestination
+DestinationPolicy <|-- OverseasDestination
+
+ShippingCalculator --> ShippingStrategy : uses
+ShippingCalculator --> DestinationPolicy : uses
+ShippingCalculator --> Shipment : reads
+
+@enduml
