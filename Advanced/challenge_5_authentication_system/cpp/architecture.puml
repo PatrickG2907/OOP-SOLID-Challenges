@@ -1,0 +1,127 @@
+@startuml
+
+abstract class PasswordAuthenticator {
+  + ~PasswordAuthenticator()
+  + authenticate(username : std::string_view, password : std::string_view) : bool
+}
+
+abstract class OAuthAuthenticator {
+  + ~OAuthAuthenticator()
+  + authenticate(token : std::string_view) : bool
+}
+
+abstract class ApiTokenAuthenticator {
+  + ~ApiTokenAuthenticator()
+  + authenticate(token : std::string_view) : bool
+}
+
+
+abstract class PasswordStore {
+  + ~PasswordStore()
+  + password_hash_for(username : std::string_view) : std::optional<std::string_view>
+}
+
+abstract class PasswordVerifier {
+  + ~PasswordVerifier()
+  + verify(password : std::string_view, stored_hash : std::string_view) : bool
+}
+
+class InMemoryPasswordStore {
+  - username_ : std::string
+  - password_hash_ : std::string
+
+  + InMemoryPasswordStore(username : std::string, password_hash : std::string)
+  + password_hash_for(username : std::string_view) : std::optional<std::string_view>
+}
+
+class DemoPasswordVerifier {
+  + verify(password : std::string_view, stored_hash : std::string_view) : bool
+}
+
+class PasswordLogin {
+  - store_ : const PasswordStore&
+  - verifier_ : const PasswordVerifier&
+
+  + PasswordLogin(store : const PasswordStore&, verifier : const PasswordVerifier&)
+  + authenticate(username : std::string_view, password : std::string_view) : bool
+}
+
+
+abstract class OAuthTokenVerifier {
+  + ~OAuthTokenVerifier()
+  + verify(token : std::string_view) : bool
+}
+
+class DemoOAuthTokenVerifier {
+  - valid_token_ : std::string
+
+  + DemoOAuthTokenVerifier(valid_token : std::string)
+  + verify(token : std::string_view) : bool
+}
+
+class OAuthLogin {
+  - verifier_ : const OAuthTokenVerifier&
+
+  + OAuthLogin(verifier : const OAuthTokenVerifier&)
+  + authenticate(token : std::string_view) : bool
+}
+
+
+abstract class ApiTokenVerifier {
+  + ~ApiTokenVerifier()
+  + verify(token : std::string_view) : bool
+}
+
+class DemoApiTokenVerifier {
+  - valid_token_ : std::string
+
+  + DemoApiTokenVerifier(valid_token : std::string)
+  + verify(token : std::string_view) : bool
+}
+
+class ApiTokenLogin {
+  - verifier_ : const ApiTokenVerifier&
+
+  + ApiTokenLogin(verifier : const ApiTokenVerifier&)
+  + authenticate(token : std::string_view) : bool
+}
+
+
+class AuthenticationService {
+  - password_authenticator_ : const PasswordAuthenticator&
+  - oauth_authenticator_ : const OAuthAuthenticator&
+  - api_token_authenticator_ : const ApiTokenAuthenticator&
+
+  + AuthenticationService(
+      password_authenticator : const PasswordAuthenticator&,
+      oauth_authenticator : const OAuthAuthenticator&,
+      api_token_authenticator : const ApiTokenAuthenticator&
+    )
+
+  + login_with_password(username : std::string_view, password : std::string_view) : bool
+  + login_with_oauth(token : std::string_view) : bool
+  + login_with_api_token(token : std::string_view) : bool
+}
+
+
+PasswordAuthenticator <|-- PasswordLogin
+OAuthAuthenticator <|-- OAuthLogin
+ApiTokenAuthenticator <|-- ApiTokenLogin
+
+PasswordStore <|-- InMemoryPasswordStore
+PasswordVerifier <|-- DemoPasswordVerifier
+
+OAuthTokenVerifier <|-- DemoOAuthTokenVerifier
+ApiTokenVerifier <|-- DemoApiTokenVerifier
+
+PasswordLogin --> PasswordStore : uses
+PasswordLogin --> PasswordVerifier : uses
+
+OAuthLogin --> OAuthTokenVerifier : uses
+ApiTokenLogin --> ApiTokenVerifier : uses
+
+AuthenticationService --> PasswordAuthenticator : uses
+AuthenticationService --> OAuthAuthenticator : uses
+AuthenticationService --> ApiTokenAuthenticator : uses
+
+@enduml
