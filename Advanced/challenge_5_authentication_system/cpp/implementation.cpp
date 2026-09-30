@@ -319,7 +319,7 @@ private:
     // non-owning dependency that should not be modified by OAuthLogin.
     // Notes: 
     //  - The reference member binds directly to the outside verifier, so no 
-    //  copy ownership transfer occurs.
+    //    copy ownership transfer occurs.
     //  - The verifier must outlive OAuthLogin.
     const OAuthTokenVerifier& verifier_;
 
@@ -337,7 +337,7 @@ public:
     {
     }
 
-    // Authentification.
+    // Authentication.
     // Notes:
     //  - authenticate() accepts the token as std::string_view because it is read-only
     //    and only needed during the call, then delegates verification to the verifier.
@@ -377,12 +377,6 @@ public:
 
 
 // Demonstration-only concrete implementation of abstract base class ApiTokenVerifier.
-/
-// verify() compares the supplied read-only string_view with the stored token.
-// override verifies that ApiTokenVerifier::verify() is implemented correctly.
-// trailing const means verification does not modify the verifier object.
-// Real API-token verification should use an appropriate credential/token service
-// or secure comparison mechanism rather than a raw string comparison.
 class DemoApiTokenVerifier : public ApiTokenVerifier {
 private:
     std::string valid_token_;
@@ -404,7 +398,7 @@ public:
         }
     }
 
-    // verification.
+    // Verification.
     // Notes:
     //  - Compare the supplied API token with the verifier's stored valid token.
     //  - std::string_view avoids copying the input because it is only read here.
@@ -419,12 +413,22 @@ public:
 };
 
 
-// Concrete API-token authentication implementation.
+// Concrete API-token login implementation that delegates token verification.
+
+
+
+
 class ApiTokenLogin : public ApiTokenAuthenticator {
 private:
+    // ApiTokenVerifier is injected by const reference because it is a required,
+    // non-owning dependency that should not be modified by ApiTokenLogin.
     const ApiTokenVerifier& verifier_;
 
 public:
+    // Constructor.
+    // Notes:
+    //  - The reference member binds directly to the outside verifier object.
+    //  - No ownership is transferred and the verifier must outlive ApiTokenLogin.
     explicit ApiTokenLogin(
         const ApiTokenVerifier& verifier
     )
@@ -432,6 +436,13 @@ public:
     {
     }
 
+    // Authentication.
+    // Notes:
+    //  - authenticate() accepts the token as std::string_view because it is read-only
+    //    and only needed during the call, then delegates verification to the verifier.
+    //  - override verifies that ApiTokenAuthenticator::authenticate() is implemented 
+    //    correctly.
+    //  - Trailing const means authentication does not modify the ApiTokenLogin object.
     bool authenticate(
         std::string_view token
     ) const override
@@ -449,11 +460,21 @@ public:
 // Concrete authentication mechanisms are injected from outside.
 class AuthenticationService {
 private:
+    // Store authenticators as non-owning const references because the service
+    // uses existing externally managed dependencies rather than owning copies.
+    // No ownership is transferred, so the authenticators must outlive this service.
     const PasswordAuthenticator& password_authenticator_;
     const OAuthAuthenticator& oauth_authenticator_;
     const ApiTokenAuthenticator& api_token_authenticator_;
 
 public:
+    // Constructor.
+    // Notes:
+    //  - Inject all authenticators by const reference to avoid copies
+    //    and keep them as non-owning dependencies.
+    //  - The reference members bind directly to the same outside authenticator objects,
+    //    so no separate member copies are created.
+    //  - The supplied authenticators must outlive AuthenticationService.
     AuthenticationService(
         const PasswordAuthenticator& password_authenticator,
         const OAuthAuthenticator& oauth_authenticator,
@@ -465,6 +486,12 @@ public:
     {
     }
 
+    // Login with password.
+    // Notes:
+    //  - Accept username and password as string_view because they are read-only
+    //    and only needed for the duration of the call.
+    //  - Trailing const means AuthenticationService itself is not modified.
+    //  - Delegate the actual authentication work to the injected authenticator.
     bool login_with_password(
         std::string_view username,
         std::string_view password
@@ -475,7 +502,13 @@ public:
             password
         );
     }
-
+    
+    // Login with OAuth.
+    // Notes:
+    //  - Accept the OAuth token as string_view because it is read-only
+    //    and only needed for the duration of the call.
+    //  - Trailing const means AuthenticationService itself is not modified.
+    //  - Delegate the actual OAuth authentication to the injected authenticator.
     bool login_with_oauth(
         std::string_view token
     ) const
@@ -483,6 +516,12 @@ public:
         return oauth_authenticator_.authenticate(token);
     }
 
+    // Login with API token.
+    // Notes:
+    //  - Accept the API token as string_view because it is read-only
+    //    and only needed for the duration of the call.
+    //  - Trailing const means AuthenticationService itself is not modified.
+    //  - Delegate the actual API-token authentication to the injected authenticator.
     bool login_with_api_token(
         std::string_view token
     ) const
