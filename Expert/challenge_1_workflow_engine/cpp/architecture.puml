@@ -1,0 +1,69 @@
+@startuml
+
+title Flow Engine
+
+class FlowContext {
+    - order_valid_ : bool
+    - payment_should_succeed_ : bool
+    - shipped_ : bool
+    + FlowContext(order_valid : bool, payment_should_succeed : bool)
+    + order_valid() : bool
+    + payment_should_succeed() : bool
+    + mark_shipped() : void
+    + shipped() : bool
+}
+
+abstract class FlowStep {
+    + ~FlowStep()
+    + execute(context : FlowContext&) : Outcome
+}
+
+class ValidateOrderStep {
+    + execute(context : FlowContext&) : Outcome
+}
+
+class PaymentStep {
+    + execute(context : FlowContext&) : Outcome
+}
+
+class ShippingStep {
+    + execute(context : FlowContext&) : Outcome
+}
+
+class RejectOrderStep {
+    + execute(context : FlowContext&) : Outcome
+}
+
+class AlwaysFailPaymentStep {
+    + execute(context : FlowContext&) : Outcome
+}
+
+class FlowDefinition {
+    - start_step_ : StepId
+    - transitions_ : std::unordered_map<StepId, OutcomeTransitions>
+    + FlowDefinition(start_step : StepId)
+    + start_step() : const StepId&
+    + add_transition(from : StepId, outcome : Outcome, to : std::optional<StepId>) : void
+    + next_step(current_step : const StepId&, outcome : const Outcome&) : std::optional<StepId>
+}
+
+class FlowEngine {
+    - definition_ : FlowDefinition
+    - steps_ : std::unordered_map<StepId, std::unique_ptr<FlowStep>>
+    + FlowEngine(definition : FlowDefinition)
+    + set_step(id : StepId, step : std::unique_ptr<FlowStep>) : void
+    + run(context : FlowContext&) : void
+}
+
+FlowStep <|-- ValidateOrderStep
+FlowStep <|-- PaymentStep
+FlowStep <|-- ShippingStep
+FlowStep <|-- RejectOrderStep
+FlowStep <|-- AlwaysFailPaymentStep
+
+FlowEngine *-- FlowDefinition
+FlowEngine *-- "0..*" FlowStep
+FlowEngine --> FlowContext
+FlowStep --> FlowContext
+
+@enduml
