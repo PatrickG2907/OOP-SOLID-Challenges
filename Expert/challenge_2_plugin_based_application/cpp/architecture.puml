@@ -1,0 +1,47 @@
+@startuml
+
+title Expert Challenge 2 - Plugin System
+
+abstract class ConfigurablePlugin {
+    + ~ConfigurablePlugin()
+    + configure(value : std::string_view) : void
+}
+
+abstract class ActionPlugin {
+    + ~ActionPlugin()
+    + execute(input : std::string_view) : std::string
+}
+
+class GreetingPlugin {
+    + execute(input : std::string_view) : std::string
+}
+
+class UppercasePlugin {
+    - prefix_ : std::string
+    - validate_prefix(prefix : std::string_view) : void
+    + UppercasePlugin(prefix : std::string_view)
+    + configure(value : std::string_view) : void
+    + execute(input : std::string_view) : std::string
+}
+
+class CoreApplication {
+    - plugins_ : std::unordered_map<std::string, std::unique_ptr<ActionPlugin>>
+    - validate_id(id : std::string_view) : void
+    - validate_existing_id(id : const std::string&) : void
+    - validate_ptr(ptr : const std::unique_ptr<ActionPlugin>&) : void
+    - validate_unique_id(id : const std::string&) : void
+    + CoreApplication()
+    + install_plugin(id : std::string, plugin : std::unique_ptr<ActionPlugin>) : void
+    + remove_plugin(id : const std::string&) : void
+    + run_plugin(id : const std::string&, input : std::string_view) : std::string
+    + configure_plugin(id : const std::string&, value : std::string_view) : void
+}
+
+ActionPlugin <|-- GreetingPlugin
+ActionPlugin <|-- UppercasePlugin
+ConfigurablePlugin <|-- UppercasePlugin
+
+CoreApplication *-- "0..*" ActionPlugin
+CoreApplication ..> ConfigurablePlugin
+
+@enduml
