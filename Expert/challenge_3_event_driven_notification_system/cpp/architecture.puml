@@ -1,0 +1,59 @@
+@startuml
+
+title Expert Challenge 3 - Event-Driven System
+
+enum EventType {
+    UserRegistered
+    OrderPlaced
+    PaymentFailed
+}
+
+class Event {
+    - type_ : EventType
+    - message_ : std::string
+    - {static} validate_message(message : std::string_view) : void
+    + Event(type : EventType, message : std::string)
+    + type() : EventType
+    + message() : const std::string&
+}
+
+abstract class EventListener {
+    + ~EventListener()
+    + on_event(event : const Event&) : void
+}
+
+class LoggingListener {
+    + on_event(event : const Event&) : void
+}
+
+class EmailListener {
+    + on_event(event : const Event&) : void
+}
+
+class MetricsListener {
+    - event_count_ : std::size_t
+    + on_event(event : const Event&) : void
+    + event_count() : std::size_t
+}
+
+class EventDispatcher {
+    - listeners_ : std::unordered_map<EventType, std::vector<std::unique_ptr<EventListener>>>
+    - {static} validate_listener(listener : const std::unique_ptr<EventListener>&) : void
+    + EventDispatcher()
+    + register_listener(type : EventType, listener : std::unique_ptr<EventListener>) : void
+    + publish(event : const Event&) : void
+}
+
+Event --> EventType
+
+EventListener <|-- LoggingListener
+EventListener <|-- EmailListener
+EventListener <|-- MetricsListener
+
+EventListener ..> Event
+
+EventDispatcher *-- "0..*" EventListener
+EventDispatcher ..> Event
+EventDispatcher ..> EventType
+
+@enduml
