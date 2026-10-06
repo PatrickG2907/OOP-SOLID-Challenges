@@ -1,0 +1,64 @@
+@startuml
+title Expert Challenge 5 - Loan Approval System
+
+class Applicant {
+    - name_ : std::string
+    - annual_income_cents_ : std::int64_t
+    - existing_debt_cents_ : std::int64_t
+    - credit_score_ : int
+    + Applicant(name : std::string, annual_income_cents : std::int64_t, existing_debt_cents : std::int64_t, credit_score : int)
+    + name() : const std::string&
+    + annual_income_cents() : std::int64_t
+    + existing_debt_cents() : std::int64_t
+    + credit_score() : int
+}
+
+abstract class Specification {
+    + ~Specification()
+    + is_satisfied_by(applicant : const Applicant&) : bool
+}
+
+class CreditScoreSpecification {
+    - minimum_score_ : int
+    + CreditScoreSpecification(minimum_score : int)
+    + is_satisfied_by(applicant : const Applicant&) : bool
+}
+
+class IncomeSpecification {
+    - minimum_income_cents_ : std::int64_t
+    + IncomeSpecification(minimum_income_cents : std::int64_t)
+    + is_satisfied_by(applicant : const Applicant&) : bool
+}
+
+class DebtRatioSpecification {
+    - maximum_debt_ratio_ : double
+    + DebtRatioSpecification(maximum_debt_ratio : double)
+    + is_satisfied_by(applicant : const Applicant&) : bool
+}
+
+class AndSpecification {
+    - specifications_ : std::vector<std::unique_ptr<Specification>>
+    + add(specification : std::unique_ptr<Specification>) : void
+    + is_satisfied_by(applicant : const Applicant&) : bool
+}
+
+class LoanApprovalService {
+    + approve(applicant : const Applicant&, specification : const Specification&) : bool
+}
+
+Specification <|-- CreditScoreSpecification
+Specification <|-- IncomeSpecification
+Specification <|-- DebtRatioSpecification
+Specification <|-- AndSpecification
+
+AndSpecification *-- "0..*" Specification
+
+CreditScoreSpecification ..> Applicant
+IncomeSpecification ..> Applicant
+DebtRatioSpecification ..> Applicant
+AndSpecification ..> Applicant
+
+LoanApprovalService ..> Applicant
+LoanApprovalService ..> Specification
+
+@enduml
