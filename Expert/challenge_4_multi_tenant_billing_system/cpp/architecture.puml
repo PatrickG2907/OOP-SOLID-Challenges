@@ -1,0 +1,94 @@
+@startuml
+title Expert Challenge 4 - Billing System
+
+enum PricingModelType {
+    FlatRate
+    UsageBased
+    Tiered
+}
+
+class Customer {
+    - id_ : std::string
+    - name_ : std::string
+    - usage_units_ : std::size_t
+    - pricing_model_ : PricingModelType
+
+    + Customer(id : std::string, name : std::string, usage_units : std::size_t, pricing_model : PricingModelType)
+    + id() : const std::string&
+    + name() : const std::string&
+    + usage_units() : std::size_t
+    + pricing_model() : PricingModelType
+}
+
+class Invoice {
+    - customer_id_ : std::string
+    - amount_cents_ : std::int64_t
+
+    + Invoice(customer_id : std::string, amount_cents : std::int64_t)
+    + customer_id() : const std::string&
+    + amount_cents() : std::int64_t
+}
+
+abstract class PricingStrategy {
+    + ~PricingStrategy()
+    + calculate(usage_units : std::size_t) : std::int64_t
+}
+
+class FlatRatePricing {
+    - flat_rate_cents_ : std::int64_t
+
+    + FlatRatePricing(flat_rate_cents : std::int64_t)
+    + calculate(usage_units : std::size_t) : std::int64_t
+}
+
+class UsageBasedPricing {
+    - price_per_unit_cents_ : std::int64_t
+
+    + UsageBasedPricing(price_per_unit_cents : std::int64_t)
+    + calculate(usage_units : std::size_t) : std::int64_t
+}
+
+class Tier {
+    - start_units_ : std::size_t
+    - price_per_unit_cents_ : std::int64_t
+
+    + Tier(start_units : std::size_t, price_per_unit_cents : std::int64_t)
+    + start_units() : std::size_t
+    + price_per_unit_cents() : std::int64_t
+}
+
+class TieredPricing {
+    - tiers_ : std::vector<Tier>
+
+    + TieredPricing(tiers : std::vector<Tier>)
+    + calculate(usage_units : std::size_t) : std::int64_t
+}
+
+class PricingStrategyFactory {
+    + {static} create(type : PricingModelType) : std::unique_ptr<PricingStrategy>
+}
+
+class BillingService {
+    + generate_invoice(customer : const Customer&) : Invoice
+}
+
+PricingStrategy <|-- FlatRatePricing
+PricingStrategy <|-- UsageBasedPricing
+PricingStrategy <|-- TieredPricing
+
+TieredPricing *-- "1..*" Tier
+
+Customer --> PricingModelType
+
+PricingStrategyFactory ..> PricingModelType
+PricingStrategyFactory ..> PricingStrategy
+PricingStrategyFactory ..> FlatRatePricing
+PricingStrategyFactory ..> UsageBasedPricing
+PricingStrategyFactory ..> TieredPricing
+
+BillingService ..> Customer
+BillingService ..> Invoice
+BillingService ..> PricingStrategyFactory
+BillingService ..> PricingStrategy
+
+@enduml
